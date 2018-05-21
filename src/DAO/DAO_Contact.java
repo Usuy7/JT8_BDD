@@ -76,7 +76,7 @@ public class DAO_Contact extends Conexion_DAO {
                 phone = tc.readLine();
             }
 
-            System.out.print("Birthdate format dd/MM/yyyy: ");
+            System.out.print("Birthdate format dd-MM-yyyy: ");
             String birthdate = tc.readLine();
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -96,7 +96,7 @@ public class DAO_Contact extends Conexion_DAO {
             stmt.setString(3, c.getSurname());
             stmt.setString(4, c.getStreet());
             stmt.setString(5, c.getPhone());
-            stmt.setDate(6, (java.sql.Date) c.getBirthdate());
+            stmt.setDate(6, (java.sql.Date) (c.getBirthdate()));
             stmt.executeUpdate();
             stmt.close();
 

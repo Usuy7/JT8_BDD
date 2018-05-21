@@ -81,6 +81,7 @@ public class agenda extends DAO_Contact{
                 break;
             case 7: // EXIT
                 dao.disconnect_BDD();
+                System.out.println("Bye bye");
                 break;
         }
     }
