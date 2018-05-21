@@ -2,7 +2,7 @@ package ENTITY;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *

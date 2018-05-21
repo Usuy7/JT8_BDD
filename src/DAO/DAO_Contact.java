@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -26,7 +26,7 @@ public class DAO_Contact extends Conexion_DAO {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM contactos");
 
-            System.out.println("***CONTACTS***");
+            System.out.println("\n*****CONTACTS*****");
 
             while (rs.next()) {
                 String id = rs.getString("Id");
@@ -35,9 +35,11 @@ public class DAO_Contact extends Conexion_DAO {
                 String street = rs.getString("Street");
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
+                
+                contact c = new contact(id, name, surname, street, phone, birthdate);
 
-                System.out.println("\nID: " + id + "\nName: " + name + "\nSurname: " + surname + "\nStreet: " + street + "\nPhone: " + phone + "\nBirthdate: " + birthdate);
-                System.out.println("**********");
+                System.out.println(c.toString());
+                System.out.println("*********************");
             }
             rs.close();
             
@@ -76,10 +78,11 @@ public class DAO_Contact extends Conexion_DAO {
                 phone = tc.readLine();
             }
 
-            System.out.print("Birthdate format dd-MM-yyyy: ");
+            System.out.print("Birthdate format dd/MM/yyyy: ");
             String birthdate = tc.readLine();
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            
             Date fecha = sdf.parse(birthdate);
 
             while (!sdf.format(fecha).equals(birthdate)) {
@@ -96,7 +99,7 @@ public class DAO_Contact extends Conexion_DAO {
             stmt.setString(3, c.getSurname());
             stmt.setString(4, c.getStreet());
             stmt.setString(5, c.getPhone());
-            stmt.setDate(6, (java.sql.Date) (c.getBirthdate()));
+            stmt.setDate(6, (c.getBirthdate()));
             stmt.executeUpdate();
             stmt.close();
 
