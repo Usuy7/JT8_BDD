@@ -28,7 +28,7 @@ public class agenda extends DAO_Contact{
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
 
     public agenda() throws IOException, Exception {
-         con.connect_BDD();
+        con.connect_BDD();
         start();
     }
 
