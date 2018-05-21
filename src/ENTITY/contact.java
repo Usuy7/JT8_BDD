@@ -3,6 +3,7 @@ package ENTITY;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.text.NumberFormat;
 
 /**
  *
@@ -33,7 +34,13 @@ public class contact implements Serializable {
         return "\nID: " + getId() + "\nName: " + getName() + "\nSurname: " + getSurname() + "\nStreet: " + getStreet() + "\nPhone: " + getPhone() + "\nBirthdate: " + format_date();
     }
     
-    public String format_date (){
+    public String format_phone() {
+        NumberFormat nf = NumberFormat.getInstance();
+        String phone_formated = nf.format(getPhone());
+        return phone_formated;
+    }
+    
+    public String format_date() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String birthday_formated = sdf.format(getBirthdate());
         return birthday_formated;
