@@ -3,9 +3,9 @@ package DAO;
 import ENTITY.contact;
 import static METODOS.metodos.isLetra;
 import static METODOS.metodos.isNum;
-import interfaces.DAO_Contact;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,15 +17,13 @@ import java.util.Date;
  *
  * @author Javier
  */
-public class DAO_Contact_Impl extends connection implements DAO_Contact {
+public class DAO_Contact extends Conexion_DAO {
 
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
 
-    @Override
-    public void show() throws Exception {
+    public void show(Connection con) throws Exception {
         try {
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            Statement st = this.conexion.createStatement();
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM contactos");
 
             System.out.println("***CONTACTS***");
@@ -45,13 +43,10 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
             
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 
-    @Override
-    public void add() throws Exception {
+    public void add(Connection con) throws Exception {
         try {
 
             System.out.println("\n***New Contacto***");
@@ -95,8 +90,7 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
 
             contact c = new contact(id, name, surname, street, phone, fecha);
 
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
             stmt.setString(1, c.getId());
             stmt.setString(2, c.getName());
             stmt.setString(3, c.getSurname());
@@ -108,13 +102,10 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
 
         } catch (SQLException e) {
             System.out.println("Error adding contact: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 
-    @Override
-    public void update() throws Exception {
+    public void update(Connection con) throws Exception {
         try {
 
             System.out.print("\nEnter the contact ID you want to update: ");
@@ -150,8 +141,7 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
                 fecha = sdf.parse(birthdate);
             }    
             
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            PreparedStatement stmt = this.conexion.prepareStatement("UPDATE contactos SET Name = ?, Surname = ?, Street = ?, Phone = ?, Birthdate = ? where Id =" + id);
+            PreparedStatement stmt = con.prepareStatement("UPDATE contactos SET Name = ?, Surname = ?, Street = ?, Phone = ?, Birthdate = ? where Id =" + id);
 
             stmt.setString(1, name);
             stmt.setString(2, surname);
@@ -163,20 +153,16 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
 
         } catch (SQLException e) {
             System.out.println("Error updating contact: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 
-    @Override
-    public void search() throws Exception {
+    public void search(Connection con) throws Exception {
         try {
             
             System.out.print("\nEnter the contact ID you want to search: ");
             String Id = tc.readLine();
             
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM contactos WHERE Id =" + Id);
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM contactos WHERE Id =" + Id);
             ResultSet rs = stmt.executeQuery();
             
             System.out.println("***CONTACT***");
@@ -196,40 +182,30 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
             
         } catch (SQLException e) {
             System.out.println("Error searching contact: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 
-    @Override
-    public void delete() throws Exception {
+    public void delete(Connection con) throws Exception {
         try {
             
             System.out.print("\nEnter the contact ID you want to delete: ");
             String id = tc.readLine();
             
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM contactos WHERE Id =" + id);
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM contactos WHERE Id =" + id);
             stmt.executeUpdate();
             stmt.close();
             
         } catch (SQLException e) {
             System.out.println("Error deleting contact: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 
-    @Override
-    public void sort() throws Exception {
+    public void sort(Connection con) throws Exception {
         try {
-            this.connect_BDD(); // ABRIMOS LA CONEXIÓN A LA BDD
-            PreparedStatement st = this.conexion.prepareStatement("SELECT * FROM contactos  ");
+            PreparedStatement st = con.prepareStatement("SELECT * FROM contactos  ");
 
         } catch (SQLException e) {
             System.out.println("Error sorting contact: " + e.getMessage());
-        } finally {
-            this.disconnect_BDD(); // CERRAMOS LA CONEXIÓN A LA BDD
         }
     }
 

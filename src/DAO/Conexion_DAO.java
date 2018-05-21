@@ -10,9 +10,9 @@ import java.util.logging.Logger;
  *
  * @author Javier
  */
-public class connection {
+public class Conexion_DAO {
 
-    protected Connection conexion;
+    public Connection conexion;
 
     // JDBC driver nombre y base de datos URL
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -40,7 +40,7 @@ public class connection {
                     conexion.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(connection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Conexion_DAO.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println(ex.getMessage());
             }
         }

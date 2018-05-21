@@ -1,20 +1,26 @@
 package MAIN;
 
-import DAO.DAO_Contact_Impl;
+import DAO.Conexion_DAO;
+import DAO.DAO_Contact;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 
 /**
  *
  * @author Javier
  */
-public class agenda extends DAO_Contact_Impl{
+public class agenda extends DAO_Contact{
 
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
      */
+    
+    Conexion_DAO con = new Conexion_DAO();
+    DAO_Contact dao = new DAO_Contact();
+    
     public static void main(String[] args) throws IOException, Exception {
         new agenda();
     }
@@ -22,6 +28,7 @@ public class agenda extends DAO_Contact_Impl{
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
 
     public agenda() throws IOException, Exception {
+         con.connect_BDD();
         start();
     }
 
@@ -55,19 +62,25 @@ public class agenda extends DAO_Contact_Impl{
     public void menu(int opc) throws Exception {
         switch (opc) {
             case 1: // SHOW
-                
+                dao.show(con.conexion);
                 break;
             case 2: // ADD
+                dao.add(con.conexion);
                 break;
             case 3: // UPDATE
+                dao.update(con.conexion);
                 break;
             case 4: // SEARCH
+                dao.search(con.conexion);
                 break;
             case 5: // DELETE
+                dao.delete(con.conexion);
                 break;
             case 6: //SORT
+                dao.sort(con.conexion);
                 break;
             case 7: // EXIT
+                dao.disconnect_BDD();
                 break;
         }
     }
