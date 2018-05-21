@@ -38,7 +38,7 @@ public class DAO_Contact_Impl extends connection implements DAO_Contact {
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
 
-                System.out.println("\nID: " + id + "\nName" + name + "\nSurname" + surname + "\nStreet" + street + "\nPhone" + phone + "\nBirthdate" + birthdate);
+                System.out.println("\nID: " + id + "\nName: " + name + "\nSurname: " + surname + "\nStreet: " + street + "\nPhone: " + phone + "\nBirthdate: " + birthdate);
                 System.out.println("**********");
             }
             rs.close();

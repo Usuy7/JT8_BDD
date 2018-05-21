@@ -15,17 +15,17 @@ public class agenda extends DAO_Contact_Impl{
      * @param args the command line arguments
      * @throws java.io.IOException
      */
-    public static void main(String[] args) throws IOException {
-        agenda agenda_manager = new agenda();
+    public static void main(String[] args) throws IOException, Exception {
+        new agenda();
     }
 
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
 
-    public agenda() throws IOException {
+    public agenda() throws IOException, Exception {
         start();
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, Exception {
         int opc;
         do {
             System.out.print("\n***AGENDA MANAGER***\n"
@@ -39,14 +39,16 @@ public class agenda extends DAO_Contact_Impl{
                     + "Choose an option: ");
             opc = Integer.parseInt(tc.readLine());
             validate(opc);
+            menu(opc);
         } while (opc != 7);
     }
 
-    public void validate(int opc) throws IOException {
+    public void validate(int opc) throws IOException, Exception {
         while (opc < 1 || opc > 7) {
             System.out.print("Option not valid, enter again: ");
             opc = Integer.parseInt(tc.readLine());
             validate(opc);
+            menu(opc);
         }
     }
 
