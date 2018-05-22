@@ -109,8 +109,8 @@ public class DAO_Contact extends Conexion_DAO {
                 }
                 birthday = Integer.parseInt(aux);
                 if (birthday < 1 || birthday > 31) {
-                    System.out.println("That day is not valid: ");
-                    birthday = Integer.parseInt(aux);
+                    System.out.print("That day is not valid: ");
+                    birthday = Integer.parseInt(tc.readLine());
                 } else {
                     val = true;
                 }
@@ -124,12 +124,12 @@ public class DAO_Contact extends Conexion_DAO {
                     System.out.print("Error, enter numbers: ");
                     aux = tc.readLine();
                 }
-                birth_month = Integer.parseInt(aux) - 1;
-                if (birth_month < 0 || birth_month > 11) {
+                birth_month = Integer.parseInt(aux);
+                if (birth_month < 1 || birth_month > 12) {
                     System.out.println("That month is not valid: ");
-                    birth_month = Integer.parseInt(aux);
+                    birth_month = Integer.parseInt(tc.readLine());
                 } else {
-                    val = true;
+                    val = true;   
                 }
             } while (!val);
 
@@ -144,12 +144,14 @@ public class DAO_Contact extends Conexion_DAO {
                 year_birth = Integer.parseInt(aux);
                 if (year_birth < 1900) {
                     System.out.println("That year is not valid: ");
-                    year_birth = Integer.parseInt(aux);
-                } else {
-                    year_birth -= 1900;
+                    year_birth = Integer.parseInt(tc.readLine());
+                } else { 
                     val = true;
                 }
             } while (!val);
+            
+            birth_month --;
+            year_birth -= 1900;
 
             System.out.println("\nContact addeded");
 
