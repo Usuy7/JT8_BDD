@@ -57,7 +57,7 @@ public class DAO_Contact extends Conexion_DAO {
             System.out.print("\nID: ");
             String id = tc.readLine();
             while (isNum(id) == false) {
-                System.out.println("Error, enter numbers: ");
+                System.out.print("Error, enter numbers: ");
                 id = tc.readLine();
             }
 
@@ -75,22 +75,64 @@ public class DAO_Contact extends Conexion_DAO {
             System.out.print("Phone: ");
             String phone = tc.readLine();
             while (isNum(phone) == false) {
-                System.out.println("Error, enter numbers: ");
+                System.out.print("Error, enter numbers: ");
                 phone = tc.readLine();
             }
 
-            System.out.print("Birthday: ");
-            aux = tc.readLine();
-            birthday = Integer.parseInt(aux);
+            do {
+                System.out.print("Birthday: ");
+                aux = tc.readLine();
 
-            System.out.print("Birth month: ");
-            aux = tc.readLine();
-            birth_month = Integer.parseInt(aux) + 1;
+                while (isNum(aux) == false) {
+                    System.out.print("Error, enter numbers: ");
+                    aux = tc.readLine();
+                }
+                birthday = Integer.parseInt(aux);
+                if (birthday < 1 || birthday > 31) {
+                    System.out.print("That day is not valid: ");
+                    birthday = Integer.parseInt(aux);
+                } else {
+                    val = true;
+                }
+            } while (!val);
 
-            System.out.print("Year of birth: ");
-            aux = tc.readLine();
-            year_birth = Integer.parseInt(aux) - 1900;
+            do {
+                System.out.print("Birth month: ");
+                aux = tc.readLine();
 
+                while (isNum(aux) == false) {
+                    System.out.print("Error, enter numbers: ");
+                    aux = tc.readLine();
+                }
+                birth_month = Integer.parseInt(aux) - 1;
+                if (birth_month < 0 || birth_month > 11) {
+                    System.out.print("That month is not valid: ");
+                    birth_month = Integer.parseInt(aux);
+                } else {
+                    val = true;
+                }
+            } while (!val);
+
+            do {
+                System.out.print("Year of birth: ");
+                aux = tc.readLine();
+
+                while (isNum(aux) == false) {
+                    System.out.print("Error, enter numbers: ");
+                    aux = tc.readLine();
+                }
+                year_birth = Integer.parseInt(aux);
+                if (year_birth < 1900) {
+                    System.out.print("That year is not valid: ");
+                    year_birth = Integer.parseInt(aux);
+                } else {
+                    year_birth -= 1900;
+                    val = true;
+                }
+            } while (!val);
+
+            System.out.println("\nContact addeded");
+            
             Date birthdate = new Date(year_birth, birth_month, birthday);
 
             contact c = new contact(id, name, surname, street, phone, birthdate);
@@ -103,9 +145,6 @@ public class DAO_Contact extends Conexion_DAO {
             stmt.setString(5, c.getPhone());
             stmt.setDate(6, (c.getBirthdate()));
             stmt.executeUpdate();
-            
-            System.out.println("\nContact addeded");
-            
             stmt.close();
 
         } catch (SQLException e) {
@@ -147,28 +186,32 @@ public class DAO_Contact extends Conexion_DAO {
                 aux = tc.readLine();
 
                 while (isNum(aux) == false) {
-                    System.out.println("Error, enter numbers: ");
+                    System.out.print("Error, enter numbers: ");
                     aux = tc.readLine();
                 }
                 birthday = Integer.parseInt(aux);
-                while (birthday < 1 || birthday > 31) {
-                    System.out.println("That day is not valid: ");
+                if (birthday < 1 || birthday > 31) {
+                    System.out.print("That day is not valid: ");
                     birthday = Integer.parseInt(aux);
+                } else {
+                    val = true;
                 }
             } while (!val);
 
             do {
-                System.out.println("Birth month: ");
+                System.out.print("Birth month: ");
                 aux = tc.readLine();
 
                 while (isNum(aux) == false) {
-                    System.out.println("Error, enter numbers: ");
+                    System.out.print("Error, enter numbers: ");
                     aux = tc.readLine();
                 }
-                birth_month = Integer.parseInt(aux) + 1;
-                while (birth_month < 1 || birth_month > 12) {
-                    System.out.println("That month is not valid: ");
+                birth_month = Integer.parseInt(aux) - 1;
+                if (birth_month < 0 || birth_month > 11) {
+                    System.out.print("That month is not valid: ");
                     birth_month = Integer.parseInt(aux);
+                } else {
+                    val = true;
                 }
             } while (!val);
 
@@ -177,15 +220,20 @@ public class DAO_Contact extends Conexion_DAO {
                 aux = tc.readLine();
 
                 while (isNum(aux) == false) {
-                    System.out.println("Error, enter numbers: ");
+                    System.out.print("Error, enter numbers: ");
                     aux = tc.readLine();
                 }
-                year_birth = Integer.parseInt(aux) - 1900;
-                while (year_birth < 1900) {
-                    System.out.println("That year is not valid: ");
+                year_birth = Integer.parseInt(aux);
+                if (year_birth < 1900) {
+                    System.out.print("That year is not valid: ");
                     year_birth = Integer.parseInt(aux);
+                } else {
+                    year_birth -= 1900;
+                    val = true;
                 }
             } while (!val);
+            
+            System.out.println("\nContact udapted");
 
             Date birthdate = new Date(year_birth, birth_month, birthday);
 
@@ -243,10 +291,10 @@ public class DAO_Contact extends Conexion_DAO {
             System.out.print("\nEnter the contact ID you want to delete: ");
             String id = tc.readLine();
 
+            System.out.println("\nContact deleted");
+            
             PreparedStatement stmt = con.prepareStatement("DELETE FROM contactos WHERE Id =" + id);
             stmt.executeUpdate();
-            
-            System.out.println("\nContact deleted");
             stmt.close();
 
         } catch (SQLException e) {
