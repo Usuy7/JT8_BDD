@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  *
@@ -40,6 +41,7 @@ public class DAO_Contact extends Conexion_DAO {
                 System.out.println("*********************");
             }
             rs.close();
+            st.close();
 
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
@@ -56,9 +58,27 @@ public class DAO_Contact extends Conexion_DAO {
 
             System.out.print("\nID: ");
             String id = tc.readLine();
-            while (isNum(id) == false) {
-                System.out.print("Error, enter numbers: ");
-                id = tc.readLine();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT Id FROM contactos");
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<String> num = new ArrayList();
+            while (rs.next()) {
+                String ID = rs.getString("Id");
+                num.add(ID);
+            }
+            rs.close();
+            stmt.close();
+            
+            while  (!val){
+                for (int i = 0; i < num.size(); i++) {
+                    if (num.get(i).equalsIgnoreCase(id) || isNum(id) == false) {
+                        System.out.print("Error: ");
+                        id = tc.readLine();
+                    } else {
+                        val = true;
+                    }
+                }
             }
 
             System.out.print("Name: ");
@@ -89,7 +109,7 @@ public class DAO_Contact extends Conexion_DAO {
                 }
                 birthday = Integer.parseInt(aux);
                 if (birthday < 1 || birthday > 31) {
-                    System.out.print("That day is not valid: ");
+                    System.out.println("That day is not valid: ");
                     birthday = Integer.parseInt(aux);
                 } else {
                     val = true;
@@ -106,7 +126,7 @@ public class DAO_Contact extends Conexion_DAO {
                 }
                 birth_month = Integer.parseInt(aux) - 1;
                 if (birth_month < 0 || birth_month > 11) {
-                    System.out.print("That month is not valid: ");
+                    System.out.println("That month is not valid: ");
                     birth_month = Integer.parseInt(aux);
                 } else {
                     val = true;
@@ -123,7 +143,7 @@ public class DAO_Contact extends Conexion_DAO {
                 }
                 year_birth = Integer.parseInt(aux);
                 if (year_birth < 1900) {
-                    System.out.print("That year is not valid: ");
+                    System.out.println("That year is not valid: ");
                     year_birth = Integer.parseInt(aux);
                 } else {
                     year_birth -= 1900;
@@ -132,20 +152,20 @@ public class DAO_Contact extends Conexion_DAO {
             } while (!val);
 
             System.out.println("\nContact addeded");
-            
+
             Date birthdate = new Date(year_birth, birth_month, birthday);
 
             contact c = new contact(id, name, surname, street, phone, birthdate);
 
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
-            stmt.setString(1, c.getId());
-            stmt.setString(2, c.getName());
-            stmt.setString(3, c.getSurname());
-            stmt.setString(4, c.getStreet());
-            stmt.setString(5, c.getPhone());
-            stmt.setDate(6, (c.getBirthdate()));
-            stmt.executeUpdate();
-            stmt.close();
+            PreparedStatement stmt2 = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
+            stmt2.setString(1, c.getId());
+            stmt2.setString(2, c.getName());
+            stmt2.setString(3, c.getSurname());
+            stmt2.setString(4, c.getStreet());
+            stmt2.setString(5, c.getPhone());
+            stmt2.setDate(6, (c.getBirthdate()));
+            stmt2.executeUpdate();
+            stmt2.close();
 
         } catch (SQLException e) {
             System.out.println("Error adding contact: " + e.getMessage());
@@ -162,6 +182,28 @@ public class DAO_Contact extends Conexion_DAO {
 
             System.out.print("\nEnter the contact ID you want to update: ");
             String id = tc.readLine();
+            
+            PreparedStatement stmt = con.prepareStatement("SELECT Id FROM contactos");
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<String> num = new ArrayList();
+            while (rs.next()) {
+                String ID = rs.getString("Id");
+                num.add(ID);
+            }
+            rs.close();
+            stmt.close();
+            
+            while  (!val){
+                for (int i = 0; i < num.size(); i++) {
+                    if (!num.get(i).equalsIgnoreCase(id) || isNum(id) == false) {
+                        System.out.print("Error: ");
+                        id = tc.readLine();
+                    } else {
+                        val = true;
+                    }
+                }
+            }
 
             System.out.print("New Name: ");
             String name = tc.readLine();
@@ -192,7 +234,7 @@ public class DAO_Contact extends Conexion_DAO {
                 birthday = Integer.parseInt(aux);
                 if (birthday < 1 || birthday > 31) {
                     System.out.print("That day is not valid: ");
-                    birthday = Integer.parseInt(aux);
+                    birthday = Integer.parseInt(tc.readLine());
                 } else {
                     val = true;
                 }
@@ -206,12 +248,12 @@ public class DAO_Contact extends Conexion_DAO {
                     System.out.print("Error, enter numbers: ");
                     aux = tc.readLine();
                 }
-                birth_month = Integer.parseInt(aux) - 1;
-                if (birth_month < 0 || birth_month > 11) {
-                    System.out.print("That month is not valid: ");
-                    birth_month = Integer.parseInt(aux);
+                birth_month = Integer.parseInt(aux);
+                if (birth_month < 1 || birth_month > 12) {
+                    System.out.println("That month is not valid: ");
+                    birth_month = Integer.parseInt(tc.readLine());
                 } else {
-                    val = true;
+                    val = true;   
                 }
             } while (!val);
 
@@ -225,26 +267,28 @@ public class DAO_Contact extends Conexion_DAO {
                 }
                 year_birth = Integer.parseInt(aux);
                 if (year_birth < 1900) {
-                    System.out.print("That year is not valid: ");
-                    year_birth = Integer.parseInt(aux);
-                } else {
-                    year_birth -= 1900;
+                    System.out.println("That year is not valid: ");
+                    year_birth = Integer.parseInt(tc.readLine());
+                } else { 
                     val = true;
                 }
             } while (!val);
             
+            birth_month --;
+            year_birth -= 1900;
+
             System.out.println("\nContact udapted");
 
             Date birthdate = new Date(year_birth, birth_month, birthday);
 
-            PreparedStatement stmt = con.prepareStatement("UPDATE contactos SET Name = ?, Surname = ?, Street = ?, Phone = ?, Birthdate = ? where Id =" + id);
-            stmt.setString(1, name);
-            stmt.setString(2, surname);
-            stmt.setString(3, street);
-            stmt.setString(4, phone);
-            stmt.setDate(5, birthdate);
-            stmt.executeUpdate();
-            stmt.close();
+            PreparedStatement stmt2 = con.prepareStatement("UPDATE contactos SET Name = ?, Surname = ?, Street = ?, Phone = ?, Birthdate = ? where Id =" + id);
+            stmt2.setString(1, name);
+            stmt2.setString(2, surname);
+            stmt2.setString(3, street);
+            stmt2.setString(4, phone);
+            stmt2.setDate(5, birthdate);
+            stmt2.executeUpdate();
+            stmt2.close();
 
         } catch (SQLException e) {
             System.out.println("Error updating contact: " + e.getMessage());
@@ -255,7 +299,7 @@ public class DAO_Contact extends Conexion_DAO {
         try {
 
             System.out.println("\n*****Search Contact*****");
-            
+
             System.out.print("\nEnter the contact ID you want to search: ");
             String Id = tc.readLine();
 
@@ -277,6 +321,7 @@ public class DAO_Contact extends Conexion_DAO {
                 System.out.println("*********************");
             }
             rs.close();
+            stmt.close();
 
         } catch (SQLException e) {
             System.out.println("Error searching contact: " + e.getMessage());
@@ -287,12 +332,12 @@ public class DAO_Contact extends Conexion_DAO {
         try {
 
             System.out.println("\n*****Delete Contact*****");
-            
+
             System.out.print("\nEnter the contact ID you want to delete: ");
             String id = tc.readLine();
 
             System.out.println("\nContact deleted");
-            
+
             PreparedStatement stmt = con.prepareStatement("DELETE FROM contactos WHERE Id =" + id);
             stmt.executeUpdate();
             stmt.close();
@@ -304,17 +349,17 @@ public class DAO_Contact extends Conexion_DAO {
 
     public void sort(Connection con) throws Exception {
         try {
-            
+
             System.out.println("\n*****Sort Agenda*****");
-            
+
             System.out.print("\nEnter the field for which you want to sort the agenda: ");
             String aux = tc.readLine();
-            
+
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM contactos ORDER BY " + aux);
             ResultSet rs = stmt.executeQuery();
-            
+
             System.out.println("\nOrdered agenda: ");
-            
+
             while (rs.next()) {
                 String id = rs.getString("Id");
                 String name = rs.getString("Name");
@@ -328,6 +373,7 @@ public class DAO_Contact extends Conexion_DAO {
                 System.out.println("*********************");
             }
             rs.close();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println("Error sorting contact: " + e.getMessage());
         }
