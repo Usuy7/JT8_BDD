@@ -33,13 +33,13 @@ public class contact implements Serializable {
     public String toString() {
         return "\nID: " + getId() + "\nName: " + getName() + "\nSurname: " + getSurname() + "\nStreet: " + getStreet() + "\nPhone: " + getPhone() + "\nBirthdate: " + format_date();
     }
-    
+
     public String format_phone() {
         NumberFormat nf = NumberFormat.getInstance();
         String phone_formated = nf.format(getPhone());
         return phone_formated;
     }
-    
+
     public String format_date() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String birthday_formated = sdf.format(getBirthdate());
