@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 public class metodos {
 
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
-    
+
     public static boolean isNum(String str) {
         try {
             Integer.parseInt(str);
