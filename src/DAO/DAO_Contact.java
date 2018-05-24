@@ -174,7 +174,7 @@ public class DAO_Contact extends Conexion_DAO {
         }
     }
 
-    public void update(Connection con) throws Exception {
+    public void update(Connection con, contact c) throws Exception {
         try {
 
             System.out.println("\n*****Update Contacto*****");
@@ -278,10 +278,9 @@ public class DAO_Contact extends Conexion_DAO {
             
             birth_month --;
             year_birth -= 1900;
+            Date birthdate = new Date(year_birth, birth_month, birthday);
 
             System.out.println("\nContact udapted");
-
-            Date birthdate = new Date(year_birth, birth_month, birthday);
 
             PreparedStatement stmt2 = con.prepareStatement("UPDATE contactos SET Name = ?, Surname = ?, Street = ?, Phone = ?, Birthdate = ? where Id =" + id);
             stmt2.setString(1, name);

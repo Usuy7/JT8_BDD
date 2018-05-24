@@ -2,6 +2,7 @@ package MAIN;
 
 import DAO.Conexion_DAO;
 import DAO.DAO_Contact;
+import ENTITY.contact;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ public class agenda extends DAO_Contact{
     
     Conexion_DAO con = new Conexion_DAO();
     DAO_Contact dao = new DAO_Contact();
+    contact c = new contact();
     
     public static void main(String[] args) throws IOException, Exception {
         new agenda();
@@ -68,7 +70,7 @@ public class agenda extends DAO_Contact{
                 dao.add(con.conexion);
                 break;
             case 3: // UPDATE
-                dao.update(con.conexion);
+                dao.update(con.conexion, c);
                 break;
             case 4: // SEARCH
                 dao.search(con.conexion);
