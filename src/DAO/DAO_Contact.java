@@ -22,9 +22,11 @@ public class DAO_Contact extends Conexion_DAO {
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
 
     public void show(Connection con) throws Exception {
+        Statement st = null;
+        ResultSet rs = null;
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM contactos");
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM contactos");
 
             System.out.println("\n*****CONTACTS*****");
 
@@ -40,15 +42,22 @@ public class DAO_Contact extends Conexion_DAO {
                 System.out.println(c.toString());
                 System.out.println("*********************");
             }
-            rs.close();
-            st.close();
 
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
+        }  finally {
+            if (!rs.isClosed() || !st.isClosed()) {
+                rs.close();
+                st.close();
+            }
         }
     }
 
     public void add(Connection con) throws Exception {
+        PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
+        ResultSet rs = null;
+        
         try {
 
             System.out.println("\n*****New Contact*****");
@@ -59,8 +68,8 @@ public class DAO_Contact extends Conexion_DAO {
             System.out.print("\nID: ");
             String id = tc.readLine();
 
-            PreparedStatement stmt = con.prepareStatement("SELECT Id FROM contactos");
-            ResultSet rs = stmt.executeQuery();
+            stmt = con.prepareStatement("SELECT Id FROM contactos");
+            rs = stmt.executeQuery();
 
             ArrayList<String> num = new ArrayList();
             while (rs.next()) {
@@ -159,7 +168,7 @@ public class DAO_Contact extends Conexion_DAO {
 
             contact c = new contact(id, name, surname, street, phone, birthdate);
 
-            PreparedStatement stmt2 = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
+            stmt2 = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
             stmt2.setString(1, c.getId());
             stmt2.setString(2, c.getName());
             stmt2.setString(3, c.getSurname());
@@ -167,10 +176,13 @@ public class DAO_Contact extends Conexion_DAO {
             stmt2.setString(5, c.getPhone());
             stmt2.setDate(6, (c.getBirthdate()));
             stmt2.executeUpdate();
-            stmt2.close();
 
         } catch (SQLException e) {
             System.out.println("Error adding contact: " + e.getMessage());
+        } finally {
+            if (!stmt2.isClosed()) {
+                stmt2.close();
+            }
         }
     }
 
@@ -292,13 +304,12 @@ public class DAO_Contact extends Conexion_DAO {
             stmt2.setString(4, phone);
             stmt2.setDate(5, birthdate);
             stmt2.executeUpdate();
-            stmt2.close();
 
         } catch (SQLException e) {
             System.out.println("Error updating contact: " + e.getMessage());
         } finally {
-            if (!stmt.isClosed()) {
-                stmt.close();
+            if (!stmt2.isClosed()) {
+                stmt2.close();
             }
         }
     }
