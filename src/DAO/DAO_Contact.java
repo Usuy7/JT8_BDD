@@ -186,7 +186,7 @@ public class DAO_Contact extends Conexion_DAO {
         }
     }
 
-    public void update(Connection con, contact c) throws Exception {
+    public void update(Connection con) throws Exception {
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
         ResultSet rs = null;

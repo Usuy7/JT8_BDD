@@ -21,7 +21,6 @@ public class agenda extends DAO_Contact{
     
     Conexion_DAO con = new Conexion_DAO();
     DAO_Contact dao = new DAO_Contact();
-    contact c = new contact();
     
     public static void main(String[] args) throws IOException, Exception {
         new agenda();
@@ -70,7 +69,7 @@ public class agenda extends DAO_Contact{
                 dao.add(con.conexion);
                 break;
             case 3: // UPDATE
-                dao.update(con.conexion, c);
+                dao.update(con.conexion);
                 break;
             case 4: // SEARCH
                 dao.search(con.conexion);
