@@ -198,9 +198,6 @@ public class DAO_Contact extends Conexion_DAO {
             boolean val = false;
             int birthday, birth_month, year_birth;
 
-            System.out.print("\nEnter the contact ID you want to update: ");
-            String id = tc.readLine();
-
             stmt = con.prepareStatement("SELECT Id FROM contactos");
             rs = stmt.executeQuery();
 
@@ -208,17 +205,21 @@ public class DAO_Contact extends Conexion_DAO {
             while (rs.next()) {
                 String ID = rs.getString("Id");
                 num.add(ID);
+                System.out.print(ID + " ");
             }
             rs.close();
             stmt.close();
 
+            System.out.print("\nEnter the contact ID you want to update: ");
+            String id = tc.readLine();
+
             while (!val) {
                 for (int i = 0; i < num.size(); i++) {
-                    if (!num.get(i).equalsIgnoreCase(id) || isNum(id) == false) {
+                    if (num.get(i).equalsIgnoreCase(id) || isNum(id) == false) {
+                        val = true;
+                    } else {
                         System.out.print("Error: ");
                         id = tc.readLine();
-                    } else {
-                        val = true;
                     }
                 }
             }
@@ -416,11 +417,9 @@ public class DAO_Contact extends Conexion_DAO {
 
         ArrayList<contact> agenda = new ArrayList<>();
 
-        Statement st = null;
-        ResultSet rs = null;
         try {
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM contactos");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM contactos");
 
             while (rs.next()) {
                 String id = rs.getString("Id");
@@ -430,14 +429,11 @@ public class DAO_Contact extends Conexion_DAO {
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
                 agenda.add(new contact(id, name, surname, street, phone, birthdate));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error showing contacts: " + e.getMessage());
-        } finally {
-            if (!rs.isClosed() || !st.isClosed()) {
                 rs.close();
                 st.close();
             }
+        } catch (SQLException e) {
+            System.out.println("Error showing contacts: " + e.getMessage());
         }
         return agenda;
     }

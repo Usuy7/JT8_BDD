@@ -37,7 +37,7 @@ public class agenda extends DAO_Contact {
     static File fichero = new File("Agenda.txt");
 
     public agenda() throws IOException, Exception {
-        // recover();
+        recover();
         con.connect_BDD();
         start();
     }
@@ -94,7 +94,7 @@ public class agenda extends DAO_Contact {
                 dao.lista_updateDatabase(conexion, agenda);
                 break;
             case 8: // EXIT
-                overwrite(dao.lista_savetoFile(conexion));
+                overwrite(super.lista_savetoFile(conexion));
                 dao.disconnect_BDD();
                 System.out.println("Bye bye");
                 break;
