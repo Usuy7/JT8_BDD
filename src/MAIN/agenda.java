@@ -107,7 +107,7 @@ public class agenda extends DAO_Contact {
             ObjectOutputStream serializar = new ObjectOutputStream(new FileOutputStream(fichero, false));
             serializar.writeObject(agenda);
             serializar.close();
-            System.out.println("\nTodos los datos se han guardado adecuadamente");
+            System.out.println("\nAll data has been properly saved");
         } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
             System.out.println("No se encuentra el fichero");
         } catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
