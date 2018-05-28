@@ -416,10 +416,13 @@ public class DAO_Contact extends Conexion_DAO {
     public ArrayList<contact> agenda_savetoFile(Connection con) throws SQLException {
 
         ArrayList<contact> agenda = new ArrayList<>();
-
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;   
+        
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM contactos");
+            stmt = con.prepareStatement("SELECT * FROM contactos");
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 String id = rs.getString("Id");
@@ -428,10 +431,11 @@ public class DAO_Contact extends Conexion_DAO {
                 String street = rs.getString("Street");
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
-                agenda.add(new contact(id, name, surname, street, phone, birthdate));
-                rs.close();
-                st.close();
+                contact c = new contact(id, name, surname, street, phone, birthdate);
+                agenda.add(c);
             }
+            rs.close();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
         }
@@ -439,7 +443,6 @@ public class DAO_Contact extends Conexion_DAO {
     }
 
     public void agenda_updateDatabase(Connection con, ArrayList<contact> agenda) throws Exception {
-
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
 

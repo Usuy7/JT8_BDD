@@ -34,7 +34,7 @@ public class agenda extends DAO_Contact {
     DAO_Contact dao = new DAO_Contact();
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
     static ArrayList<contact> agenda = new ArrayList<contact>();
-    static File fichero = new File("Agenda.txt");
+    static File fichero = new File("Agenda.ser");
 
     public agenda() throws IOException, Exception {
         recover();
