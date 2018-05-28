@@ -434,10 +434,13 @@ public class DAO_Contact extends Conexion_DAO {
                 contact c = new contact(id, name, surname, street, phone, birthdate);
                 agenda.add(c);
             }
-            rs.close();
-            stmt.close();
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
+        }  finally {
+            if (!rs.isClosed() || !stmt.isClosed()) {
+                rs.close();
+                stmt.close();
+            }
         }
         return agenda;
     }

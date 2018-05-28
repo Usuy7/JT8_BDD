@@ -91,10 +91,10 @@ public class agenda extends DAO_Contact {
                 dao.sort(con.conexion);
                 break;
             case 7: // UPDATE DATABASE WITH FILE'S DATA
-                dao.agenda_updateDatabase(conexion, agenda);
+                dao.agenda_updateDatabase(con.conexion, agenda);
                 break;
             case 8: // EXIT
-                overwrite(dao.agenda_savetoFile(conexion));
+                overwrite(dao.agenda_savetoFile(con.conexion));
                 dao.disconnect_BDD();
                 System.out.println("Bye bye");
                 break;
