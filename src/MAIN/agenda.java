@@ -16,29 +16,28 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-
 /**
  *
  * @author Javier
  */
-public class agenda extends DAO_Contact{
+public class agenda extends DAO_Contact {
 
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
      */
-    
     public static void main(String[] args) throws IOException, Exception {
         new agenda();
     }
-    
+
     Conexion_DAO con = new Conexion_DAO();
     DAO_Contact dao = new DAO_Contact();
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
+    static ArrayList<contact> agenda = new ArrayList<contact>();
     static File fichero = new File("Agenda.txt");
 
     public agenda() throws IOException, Exception {
-        recover();
+        // recover();
         con.connect_BDD();
         start();
     }
@@ -53,16 +52,17 @@ public class agenda extends DAO_Contact{
                     + "4.Search\n"
                     + "5.Delete\n"
                     + "6.Sort\n"
-                    + "7.Exit\n"
+                    + "7.Update Database with File's data\n"
+                    + "8.Exit\n"
                     + "Choose an option: ");
             opc = Integer.parseInt(tc.readLine());
             validate(opc);
             menu(opc);
-        } while (opc != 7);
+        } while (opc != 8);
     }
 
     public void validate(int opc) throws IOException, Exception {
-        while (opc < 1 || opc > 7) {
+        while (opc < 1 || opc > 8) {
             System.out.print("Option not valid, enter again: ");
             opc = Integer.parseInt(tc.readLine());
             validate(opc);
@@ -90,19 +90,22 @@ public class agenda extends DAO_Contact{
             case 6: //SORT
                 dao.sort(con.conexion);
                 break;
-            case 7: // EXIT
-                overwrite(super.lista_savetoFile(conexion));
+            case 7: // UPDATE DATABASE WITH FILE'S DATA
+                dao.lista_updateDatabase(conexion, agenda);
+                break;
+            case 8: // EXIT
+                overwrite(dao.lista_savetoFile(conexion));
                 dao.disconnect_BDD();
                 System.out.println("Bye bye");
                 break;
         }
     }
-    
-    public void overwrite(ArrayList <contact> lista) {
+
+    public void overwrite(ArrayList<contact> agenda) {
         try {
-            System.out.println("\nGuardando los datos en el fichero...");
+            System.out.println("\nSaving the data in the file ...");
             ObjectOutputStream serializar = new ObjectOutputStream(new FileOutputStream(fichero, false));
-            serializar.writeObject(lista);
+            serializar.writeObject(agenda);
             serializar.close();
             System.out.println("\nTodos los datos se han guardado adecuadamente");
         } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
@@ -111,19 +114,19 @@ public class agenda extends DAO_Contact{
             System.out.println("No se puede leer el fichero ");
         }
     }
-    
+
     public void recover() {
         try {
             if (fichero.exists()) {
                 // RECUPERAMOS el fichero del formato byte.
-                System.out.println("Accediendo a fichero...\n");
+                System.out.println("Accessing file...\n");
                 ObjectInputStream recuperar = new ObjectInputStream(new FileInputStream(fichero));
-                ArrayList <contact> lista = (ArrayList<contact>) recuperar.readObject();
+                agenda = (ArrayList<contact>) recuperar.readObject();
                 recuperar.close();
 
             } else {
                 // Si NO EXISTE, CREAMOS el fichero
-                System.out.println("Creamos fichero");
+                System.out.println("File created...\n");
                 FileWriter escritura = new FileWriter(fichero, true);
                 BufferedWriter buffer = new BufferedWriter(escritura);
                 buffer.close();

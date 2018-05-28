@@ -442,7 +442,7 @@ public class DAO_Contact extends Conexion_DAO {
         return lista;
     }
 
-    public void lista_savetoDatabase(Connection con, ArrayList<contact> lista) throws Exception {
+    public void lista_updateDatabase(Connection con, ArrayList<contact> agenda) throws Exception {
 
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
@@ -451,7 +451,7 @@ public class DAO_Contact extends Conexion_DAO {
             stmt = con.prepareStatement("DELETE * FROM contactos");
             stmt.executeUpdate();
 
-            for (contact c : lista) {
+            for (contact c : agenda) {
                 stmt2 = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
                 stmt2.setString(1, c.getId());
                 stmt2.setString(2, c.getName());
