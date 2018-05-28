@@ -4,6 +4,7 @@ import ENTITY.contact;
 import static METODOS.metodos.isLetra;
 import static METODOS.metodos.isNum;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,7 +46,7 @@ public class DAO_Contact extends Conexion_DAO {
 
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
-        }  finally {
+        } finally {
             if (!rs.isClosed() || !st.isClosed()) {
                 rs.close();
                 st.close();
@@ -57,7 +58,7 @@ public class DAO_Contact extends Conexion_DAO {
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
         ResultSet rs = null;
-        
+
         try {
 
             System.out.println("\n*****New Contact*****");
@@ -406,6 +407,65 @@ public class DAO_Contact extends Conexion_DAO {
         } finally {
             if (!rs.isClosed() || !stmt.isClosed()) {
                 rs.close();
+                stmt.close();
+            }
+        }
+    }
+
+    public ArrayList<contact> lista_savetoFile(Connection con) throws SQLException {
+
+        ArrayList<contact> lista = new ArrayList<>();
+
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM contactos");
+
+            while (rs.next()) {
+                String id = rs.getString("Id");
+                String name = rs.getString("Name");
+                String surname = rs.getString("Surname");
+                String street = rs.getString("Street");
+                String phone = rs.getString("Phone");
+                Date birthdate = rs.getDate("Birthdate");
+                lista.add(new contact(id, name, surname, street, phone, birthdate));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error showing contacts: " + e.getMessage());
+        } finally {
+            if (!rs.isClosed() || !st.isClosed()) {
+                rs.close();
+                st.close();
+            }
+        }
+        return lista;
+    }
+
+    public void lista_savetoDatabase(Connection con, ArrayList<contact> lista) throws Exception {
+
+        PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
+
+        try {
+            stmt = con.prepareStatement("DELETE * FROM contactos");
+            stmt.executeUpdate();
+
+            for (contact c : lista) {
+                stmt2 = con.prepareStatement("INSERT INTO contactos (Id, Name, Surname, Street, Phone, Birthdate) VALUES (?,?,?,?,?,?)");
+                stmt2.setString(1, c.getId());
+                stmt2.setString(2, c.getName());
+                stmt2.setString(3, c.getSurname());
+                stmt2.setString(4, c.getStreet());
+                stmt2.setString(5, c.getPhone());
+                stmt2.setDate(6, (c.getBirthdate()));
+                stmt2.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting contact: " + e.getMessage());
+        } finally {
+            if (!stmt.isClosed()) {
                 stmt.close();
             }
         }

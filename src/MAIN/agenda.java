@@ -4,8 +4,17 @@ import DAO.Conexion_DAO;
 import DAO.DAO_Contact;
 import ENTITY.contact;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 
 /**
@@ -19,16 +28,17 @@ public class agenda extends DAO_Contact{
      * @throws java.io.IOException
      */
     
-    Conexion_DAO con = new Conexion_DAO();
-    DAO_Contact dao = new DAO_Contact();
-    
     public static void main(String[] args) throws IOException, Exception {
         new agenda();
     }
-
+    
+    Conexion_DAO con = new Conexion_DAO();
+    DAO_Contact dao = new DAO_Contact();
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
+    static File fichero = new File("Agenda.txt");
 
     public agenda() throws IOException, Exception {
+        recover();
         con.connect_BDD();
         start();
     }
@@ -81,9 +91,49 @@ public class agenda extends DAO_Contact{
                 dao.sort(con.conexion);
                 break;
             case 7: // EXIT
+                overwrite(super.lista_savetoFile(conexion));
                 dao.disconnect_BDD();
                 System.out.println("Bye bye");
                 break;
+        }
+    }
+    
+    public void overwrite(ArrayList <contact> lista) {
+        try {
+            System.out.println("\nGuardando los datos en el fichero...");
+            ObjectOutputStream serializar = new ObjectOutputStream(new FileOutputStream(fichero, false));
+            serializar.writeObject(lista);
+            serializar.close();
+            System.out.println("\nTodos los datos se han guardado adecuadamente");
+        } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
+            System.out.println("No se encuentra el fichero");
+        } catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
+            System.out.println("No se puede leer el fichero ");
+        }
+    }
+    
+    public void recover() {
+        try {
+            if (fichero.exists()) {
+                // RECUPERAMOS el fichero del formato byte.
+                System.out.println("Accediendo a fichero...\n");
+                ObjectInputStream recuperar = new ObjectInputStream(new FileInputStream(fichero));
+                ArrayList <contact> lista = (ArrayList<contact>) recuperar.readObject();
+                recuperar.close();
+
+            } else {
+                // Si NO EXISTE, CREAMOS el fichero
+                System.out.println("Creamos fichero");
+                FileWriter escritura = new FileWriter(fichero, true);
+                BufferedWriter buffer = new BufferedWriter(escritura);
+                buffer.close();
+            }
+        } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
+            System.out.println("No se encuentra el fichero");
+        } catch (ClassNotFoundException e) { // qué hacer si no se encuentra el fichero
+            System.out.println("No se encuentra una clase con ese nombre de definición");
+        } catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
+            System.out.println("No se puede leer el fichero ");
         }
     }
 }

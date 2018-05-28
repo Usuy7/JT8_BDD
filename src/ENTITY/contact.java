@@ -17,7 +17,7 @@ public class contact implements Serializable {
     private String street;
     private String phone;
     private Date birthdate;
-
+ 
     public contact() {}
 
     public contact(String id, String name, String surname, String street, String phone, Date birthdate) {
