@@ -413,7 +413,7 @@ public class DAO_Contact extends Conexion_DAO {
         }
     }
 
-    public ArrayList<contact> lista_savetoFile(Connection con) throws SQLException {
+    public ArrayList<contact> agenda_savetoFile(Connection con) throws SQLException {
 
         ArrayList<contact> agenda = new ArrayList<>();
 
@@ -438,7 +438,7 @@ public class DAO_Contact extends Conexion_DAO {
         return agenda;
     }
 
-    public void lista_updateDatabase(Connection con, ArrayList<contact> agenda) throws Exception {
+    public void agenda_updateDatabase(Connection con, ArrayList<contact> agenda) throws Exception {
 
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
