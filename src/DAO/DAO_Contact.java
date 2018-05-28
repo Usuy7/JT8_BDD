@@ -414,7 +414,7 @@ public class DAO_Contact extends Conexion_DAO {
 
     public ArrayList<contact> lista_savetoFile(Connection con) throws SQLException {
 
-        ArrayList<contact> lista = new ArrayList<>();
+        ArrayList<contact> agenda = new ArrayList<>();
 
         Statement st = null;
         ResultSet rs = null;
@@ -429,7 +429,7 @@ public class DAO_Contact extends Conexion_DAO {
                 String street = rs.getString("Street");
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
-                lista.add(new contact(id, name, surname, street, phone, birthdate));
+                agenda.add(new contact(id, name, surname, street, phone, birthdate));
             }
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
@@ -439,7 +439,7 @@ public class DAO_Contact extends Conexion_DAO {
                 st.close();
             }
         }
-        return lista;
+        return agenda;
     }
 
     public void lista_updateDatabase(Connection con, ArrayList<contact> agenda) throws Exception {
