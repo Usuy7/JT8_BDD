@@ -119,14 +119,14 @@ public class agenda extends DAO_Contact {
         try {
             if (fichero.exists()) {
                 // RECUPERAMOS el fichero del formato byte.
-                System.out.println("Accessing file...\n");
+                System.out.println("Accessing file...");
                 ObjectInputStream recuperar = new ObjectInputStream(new FileInputStream(fichero));
                 agenda = (ArrayList<contact>) recuperar.readObject();
                 recuperar.close();
 
             } else {
                 // Si NO EXISTE, CREAMOS el fichero
-                System.out.println("File created...\n");
+                System.out.println("File created...");
                 FileWriter escritura = new FileWriter(fichero, true);
                 BufferedWriter buffer = new BufferedWriter(escritura);
                 buffer.close();
