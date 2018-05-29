@@ -9,12 +9,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,10 +41,10 @@ public class agenda extends DAO_Contact {
     DAO_Contact dao = new DAO_Contact();
     static BufferedReader tc = new BufferedReader(new InputStreamReader(System.in));
     static ArrayList<contact> agenda = new ArrayList<contact>();
-    static File fichero = new File("Agenda.ser");
+    static File fichero = new File("Agenda.txt");
 
     public agenda() throws IOException, Exception {
-        recover();
+        recover_caracter();
         con.connect_BDD();
         start();
     }
@@ -94,9 +101,9 @@ public class agenda extends DAO_Contact {
                 dao.agenda_updateDatabase(con.conexion, agenda);
                 break;
             case 8: // EXIT
-                overwrite(dao.agenda_savetoFile(con.conexion));
+                //overwrite(dao.agenda_savetoFile(con.conexion));
                 dao.disconnect_BDD();
-                System.out.println("Bye bye");
+                System.out.println("\nBye bye");
                 break;
         }
     }
@@ -107,7 +114,7 @@ public class agenda extends DAO_Contact {
             ObjectOutputStream serializar = new ObjectOutputStream(new FileOutputStream(fichero, false));
             serializar.writeObject(agenda);
             serializar.close();
-            System.out.println("\nAll data has been properly saved");
+            System.out.println("All data has been properly saved");
         } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
             System.out.println("No se encuentra el fichero");
         } catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
@@ -115,7 +122,7 @@ public class agenda extends DAO_Contact {
         }
     }
 
-    public void recover() {
+    public void recover_bite() {
         try {
             if (fichero.exists()) {
                 // RECUPERAMOS el fichero del formato byte.
@@ -137,6 +144,53 @@ public class agenda extends DAO_Contact {
             System.out.println("No se encuentra una clase con ese nombre de definición");
         } catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
             System.out.println("No se puede leer el fichero ");
+        }
+    }
+
+    public void recover_caracter() {
+        try {
+            if (fichero.exists()) {
+                // RECUPERAMOS el fichero del formato byte.
+                System.out.println("Accessing file...");
+                FileReader entrada = new FileReader(fichero);
+                BufferedReader buffer = new BufferedReader(entrada);
+
+                String linea = buffer.readLine();
+            
+            while (linea != null){
+                StringTokenizer token = new StringTokenizer(linea,"	");
+                String id = token.nextToken();
+                String name = token.nextToken();
+                String surname = token.nextToken();
+                String street = token.nextToken();
+                String phone = token.nextToken();
+                String fecha = token.nextToken();
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date birthdate = (Date) sdf.parse(fecha);
+                
+                agenda.add(new contact(id, name, surname, street, phone, birthdate));
+                linea = buffer.readLine();
+            }
+            for (int i = 0; i < agenda.size(); i++) {
+                System.out.println(agenda.get(i).toString());
+            }
+            buffer.close();
+                
+            } else {
+                // Si NO EXISTE, CREAMOS el fichero
+                System.out.println("File created...");
+                FileWriter escritura = new FileWriter(fichero, true);
+                BufferedWriter buffer = new BufferedWriter(escritura);
+                buffer.close();
+            }
+        } catch (FileNotFoundException e) { // qué hacer si no se encuentra el fichero
+            System.out.println("No se encuentra el fichero");
+        } // qué hacer si no se encuentra el fichero
+        catch (IOException e) { // qué hacer si hay un error en la lectura del fichero
+            System.out.println("No se puede leer el fichero ");
+        } catch (ParseException ex) {
+            Logger.getLogger(agenda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

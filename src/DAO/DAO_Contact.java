@@ -431,8 +431,7 @@ public class DAO_Contact extends Conexion_DAO {
                 String street = rs.getString("Street");
                 String phone = rs.getString("Phone");
                 Date birthdate = rs.getDate("Birthdate");
-                contact c = new contact(id, name, surname, street, phone, birthdate);
-                agenda.add(c);
+                agenda.add(new contact(id, name, surname, street, phone, birthdate));
             }
         } catch (SQLException e) {
             System.out.println("Error showing contacts: " + e.getMessage());
@@ -450,7 +449,7 @@ public class DAO_Contact extends Conexion_DAO {
         PreparedStatement stmt2 = null;
 
         try {
-            stmt = con.prepareStatement("DELETE * FROM contactos");
+            stmt = con.prepareStatement("TRUNCATE TABLE contactos");
             stmt.executeUpdate();
 
             for (contact c : agenda) {
@@ -463,7 +462,7 @@ public class DAO_Contact extends Conexion_DAO {
                 stmt2.setDate(6, (c.getBirthdate()));
                 stmt2.executeUpdate();
             }
-
+            System.out.println("The data of the file has been correctly uploaded to the database");
         } catch (SQLException e) {
             System.out.println("Error deleting contact: " + e.getMessage());
         } finally {
