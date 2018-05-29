@@ -4,7 +4,6 @@ import ENTITY.contact;
 import static METODOS.metodos.isLetra;
 import static METODOS.metodos.isNum;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
